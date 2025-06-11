@@ -1,6 +1,8 @@
 ---
 title: "Homework 1"
 author: "Ranjitha Bukkapattama Krishnaiah(24221339)"
+date: today
+date-format: long 
 format:
   pdf:
     documentclass: article

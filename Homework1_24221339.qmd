@@ -1,0 +1,78 @@
+---
+title: "Homework 1"
+author: "Ranjitha Bukkapattama Krishnaiah(24221339)"
+format:
+  pdf:
+    documentclass: article
+    papersize: A4
+    fig-dpi: 300
+execute: 
+  echo: false
+editor: visual
+---
+
+# Introduction
+
+The *sleep* dataset is a built-in R dataset from the `datasets` package, commonly used for analyzing paired samples. It records the *increase in hours of sleep* observed in 10 patients after taking two different drugs. Each patient received both treatments, allowing comparison of drug effects within individuals. The dataset includes three variables: `extra` (sleep increase), `group` (drug: 1 or 2), and `ID` (patient identifier). It is often used to demonstrate statistical methods such as paired t-tests and visualization of treatment effects.
+
+## Overview of Dataset
+
+In this report we will utilize the `sleep` dataset to prepare a series of plots in this report. For more information about the dataset, we can read the help file containing the following description for the dataset.
+
+The sleep data, part of base R’s datasets package, is often employed to illustrate paired sample testing. Data is reported about gain in hours of sleep for 10 patients taking two different drugs. Both drugs were taken by each patient, which allows for direct comparison between their impacts. There are three variables in the data: extra (gain in sleep), group (drug 1 or drug 2), and ID (id for each patient). It is well suited to show paired t-tests and comparative plots for the effect of treatments.
+
+```{r}
+#To show the dataset structure
+str(sleep)
+```
+
+## Data Summary
+
+Below are descriptive statistics for the increase in sleep (extra hours) in each drug group:
+
+```{r, warning=FALSE, message=FALSE}
+#To load the dplyr package for data manipulation
+library(dplyr)
+#To Group the sleep dataset by the 'group' variable and calculate the
+#summary statistics for the 'extra' variable
+sleep %>%
+  group_by(group) %>%
+  summarise(
+    Mean = mean(extra),
+    SD = sd(extra),
+    Min = min(extra),
+    Max = max(extra),
+    .groups = "drop"
+  )
+```
+
+-   Drug 2 shows a higher average increase in sleep (2.33 hours) compared to Drug 1 (0.75 hours), suggesting it may be more effective overall.
+-   Drug 1 has a wider negative range (min = -1.6),indicating some participants experienced a decrease in sleep.
+-   Both drugs show variability in responses, with Drug 2 having a slightly higher standard deviation (2.00 vs. 1.79).
+
+## Plot
+
+The following boxplot (Figure 1) visualizes the sleep increase for both drugs. This helps in comparing their distributions and central tendencies.
+
+```{r, warning=FALSE , message=FALSE}
+#| label: sleep-boxplot
+# To load the ggplot2 library for data visualization
+library(ggplot2)
+# To create a boxplot to compare sleep increase between Drug Group 1 and 2
+ggplot(sleep, aes(x = factor(group), y = extra, fill = factor(group))) +
+  geom_boxplot() + #To add boxplot geometry
+  scale_fill_manual(values = c("#FF9999", "#66CC99")) + #To fill colors
+  theme_minimal() +
+  #to add plot title and axis labels
+  labs(
+    title = "Figure 1: Sleep Increase by Drug Group",
+    x = "Drug Group (1 vs 2)",
+    y = "Extra Sleep (hours)",
+    fill = "Group"
+  )
+
+```
+
+-   Drug Group 2 shows a higher median sleep increase than Group 1, indicating it may be more effective overall.
+-   The spread of values (IQR) and Highest recorded sleep gain are both larger for Group 2, suggesting greater variability and potential for higher effectiveness.
+-   Group 1 has a lower median and includes some negative values, showing that it was less consistent and less effective for some individuals.
